@@ -1,6 +1,7 @@
 import { createClient, commandOptions } from "redis";
 import { copyFinalDist, downloadS3Folder } from "./aws";
 import { buildProject } from "./utils";
+import express from "express";
 
 const redisUrl = process.env.REDIS_URL;
 const publisher = createClient({ url: redisUrl });
@@ -10,6 +11,8 @@ const subscriber = createClient({ url: redisUrl });
     await subscriber.connect();
     await publisher.connect();
 })();
+
+const app = express();
 
 async function main() {
     while (true) {
@@ -37,3 +40,7 @@ async function main() {
 }
 
 main();
+
+app.listen(3000, () => {
+    console.log("Server is running on port 3000");
+})
